@@ -12,7 +12,7 @@ with open("server.txt") as reader:
 
 vs.sort(key=lambda i: i[0])
 for v in vs:
-	print v
+#	print v
 	server_id, name, location, counter, distance = v
 	if counter == "Taiwan":
 		print "start testing", v
