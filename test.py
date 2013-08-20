@@ -16,4 +16,5 @@ for v in vs:
 	server_id, name, location, counter, distance = v
 	if counter == "Taiwan":
 		print "start testing", v
-		os.system("speedtest-cli --server %s > %s.log"%(server_id, server_id))	
+		os.system("speedtest-cli --server %s > %s.log"%(server_id, server_id))		
+	
