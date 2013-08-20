@@ -70,16 +70,16 @@ def speed_test(host, country="Taiwan"):
                 print "start testing", server
                 filepath = "%s/%s.log" % (log_folder, server_id)
                 os.system("speedtest-cli --server %s > %s" % (server_id, filepath))
+		try:
+                    with open(filepath) as ifile:
+                        icontent = ifile.read()
 
-                with open(filepath) as ifile:
-                    icontent = ifile.read()
+                        test_from, ip = re_server.findall(icontent)[0]
+                        host_name, location, distance, ping = re_host.findall(icontent)[0]
+                        download = re_download.findall(icontent)[0]
+                        upload = re_upload.findall(icontent)[0]
 
-                    test_from, ip = re_server.findall(icontent)[0]
-                    host_name, location, distance, ping = re_host.findall(icontent)[0]
-                    download = re_download.findall(icontent)[0]
-                    upload = re_upload.findall(icontent)[0]
-
-                conn.execute("""
+                    conn.execute("""
                 insert or ignore into speeddata(
                     host,
                     test_time,
@@ -96,6 +96,8 @@ def speed_test(host, country="Taiwan"):
                     server_upload
                 ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (host, utc_time, True, server_id, name, location, country_code, distance, test_from, ip, ping, download, upload))
+                except:
+                    conn.execute("""insert or ignore into speeddata(host, test_time, test_status, server_id) values(?, ?, ?, ?)""", (host, test_time, False, server_id))
                 conn.commit()
 
 if __name__ == "__main__":
