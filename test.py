@@ -1,20 +1,102 @@
 import os
 import re
-os.system("speedtest-cli --list > server.txt")
+import datetime
+import sqlite3
 
-re_line = re.compile(r"([\d]+)\) (.*) \((.*), (.*)\) \[(.*) km\]")
-vs = []
-with open("server.txt") as reader:
-	for line in reader:
-		p= re_line.findall(line)
-		if p:
-			vs.append(p[0])
+import re
 
-vs.sort(key=lambda i: i[0])
-for v in vs:
-#	print v
-	server_id, name, location, counter, distance = v
-	if counter == "Taiwan":
-		print "start testing", v
-		os.system("speedtest-cli --server %s > %s.log"%(server_id, server_id))		
-	
+re_server = re.compile(r"Testing from (.*) \((.*)\)")
+re_host = re.compile(r"Hosted by (.*) \((.*)\) \[(.*) km\]\: (.*) ms")
+re_download = re.compile(r"Download: (.*) Mbit")
+re_upload = re.compile(r"Upload: (.*) Mbit")
+
+def listserver():
+    os.system("speedtest-cli --list > server.txt")
+
+    re_line = re.compile(r"([\d]+)\) (.*) \((.*), (.*)\) \[(.*) km\]")
+    vs = []
+    with open("server.txt") as reader:
+        for line in reader:
+            p= re_line.findall(line)
+            if p:
+               vs.append(p[0])
+
+    # sort with server id
+    vs.sort(key=lambda i: i[0])
+    return vs
+
+def create_data_table():
+    with sqlite3.connect("./speeddata.db") as conn:
+        conn.execute("""
+            create table if not exists speeddata(
+                host text,
+                test_time timestamp,
+                test_status boolean,
+                server_id integer,
+                server_name text,
+                server_location text,
+                server_counter text,
+                server_distince float,
+                server_test_from text,
+                server_test_from_ip text,
+                server_ping float,
+                server_download float,
+                server_upload float,
+                unique(host, test_time, server_id)
+            );
+        """)
+        conn.commit()
+
+
+def test_server(server_id, output_path):
+    pass
+
+def speed_test(host, country="Taiwan"):
+    servers = listserver()
+    utc_time = datetime.datetime.utcnow()
+    timestamp = utc_time.strftime("%Y%m%d/%H%M%S")
+
+    log_folder = "./log/%s/%s/%s/" % (host, timestamp, country)
+
+    os.makedirs(log_folder)
+
+    create_data_table()
+
+    with sqlite3.connect("./speeddata.db") as conn:
+        for server in servers:
+            server_id, name, location, country_code, distance = server
+
+            if country_code == country:
+                print "start testing", server
+                filepath = "%s/%s.log" % (log_folder, server_id)
+                os.system("speedtest-cli --server %s > %s" % (server_id, filepath))
+
+                with open(filepath) as ifile:
+                    icontent = ifile.read()
+
+                    test_from, ip = re_server.findall(icontent)[0]
+                    host_name, location, distance, ping = re_host.findall(icontent)[0]
+                    download = re_download.findall(icontent)[0]
+                    upload = re_upload.findall(icontent)[0]
+
+                conn.execute("""
+                insert or ignore into speeddata(
+                    host,
+                    test_time,
+                    test_status,
+                    server_id,
+                    server_name,
+                    server_location,
+                    server_counter,
+                    server_distince,
+                    server_test_from,
+                    server_test_from_ip,
+                    server_ping,
+                    server_download,
+                    server_upload
+                ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (host, utc_time, True, server_id, name, location, country_code, distance, test_from, ip, ping, download, upload))
+                conn.commit()
+
+if __name__ == "__main__":
+    import clime.now
