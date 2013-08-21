@@ -104,7 +104,7 @@ def speed_test(host, country="Taiwan"):
     timestamp = utc_time.strftime("%Y%m%d/%H%M%S")
 
     log_folder = "./log/%s/%s/%s/" % (host, timestamp, country)
-    csv_path = "./report.csv"
+    csv_path = "./%s.csv" % host
 
     os.makedirs(log_folder)
 
