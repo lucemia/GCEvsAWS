@@ -2,8 +2,8 @@ import os
 import re
 import datetime
 import sqlite3
-
 import re
+import csv
 
 re_server = re.compile(r"Testing from (.*) \((.*)\)")
 re_host = re.compile(r"Hosted by (.*) \((.*)\) \[(.*) km\]\: (.*) ms")
@@ -48,39 +48,36 @@ def create_data_table():
         conn.commit()
 
 
-def test_server(server_id, output_path):
-    pass
+def test_server(server_id, log_path):
+    try:
+        os.system("speedtest-cli --server %s > %s" % (server_id, log_path))
+        with open(log_path) as ifile:
+            icontent = ifile.read()
 
-def speed_test(host, country="Taiwan"):
-    servers = listserver()
-    utc_time = datetime.datetime.utcnow()
-    timestamp = utc_time.strftime("%Y%m%d/%H%M%S")
+            test_from, ip = re_server.findall(icontent)[0]
+            host_name, location, distance, ping = re_host.findall(icontent)[0]
+            download = re_download.findall(icontent)[0]
+            upload = re_upload.findall(icontent)[0]
 
-    log_folder = "./log/%s/%s/%s/" % (host, timestamp, country)
+            return {
+                "test_from": test_from,
+                "ip": ip,
+                "host_name": host_name,
+                "location": location,
+                "distance": distance,
+                "ping": ping,
+                "download": download,
+                "upload": upload
+            }
+    except:
+        return {}
 
-    os.makedirs(log_folder)
+def import_csv(csv_path):
+    with open(csv_path) as ifile, sqlite3.connect("./speeddata.db") as conn:
+        reader = csv.reader(ifile)
 
-    create_data_table()
-
-    with sqlite3.connect("./speeddata.db") as conn:
-        for server in servers:
-            server_id, name, location, country_code, distance = server
-
-            if country_code == country:
-                print "start testing", server
-                filepath = "%s/%s.log" % (log_folder, server_id)
-                try:
-                    os.system("speedtest-cli --server %s > %s" % (server_id, filepath))
-	
-                    with open(filepath) as ifile:
-                        icontent = ifile.read()
-
-                        test_from, ip = re_server.findall(icontent)[0]
-                        host_name, location, distance, ping = re_host.findall(icontent)[0]
-                        download = re_download.findall(icontent)[0]
-                        upload = re_upload.findall(icontent)[0]
-
-                    conn.execute("""
+        for row in reader:
+            conn.execute("""
                 insert or ignore into speeddata(
                     host,
                     test_time,
@@ -96,10 +93,48 @@ def speed_test(host, country="Taiwan"):
                     server_download,
                     server_upload
                 ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, (host, utc_time, True, server_id, name, location, country_code, distance, test_from, ip, ping, download, upload))
-                except:
-                    conn.execute("""insert or ignore into speeddata(host, test_time, test_status, server_id) values(?, ?, ?, ?)""", (host, utc_time, False, server_id))
-                conn.commit()
+            """, row)
+
+        conn.commit()
+
+
+def speed_test(host, country="Taiwan"):
+    servers = listserver()
+    utc_time = datetime.datetime.utcnow()
+    timestamp = utc_time.strftime("%Y%m%d/%H%M%S")
+
+    log_folder = "./log/%s/%s/%s/" % (host, timestamp, country)
+    csv_path = "./report.csv"
+
+    os.makedirs(log_folder)
+
+    with open(csv_path,'a') as ifile:
+        writer = csv.writer(ifile)
+
+        for server in servers:
+            server_id, name, location, country_code, distance = server
+
+            if country_code == country:
+                print "start testing", server
+                filepath = "%s/%s.log" % (log_folder, server_id)
+
+                vs = test_server(server_id, filepath)
+
+                writer.writerow([
+                    host,
+                    utc_time,
+                    True if vs else False,
+                    server_id,
+                    name,
+                    location,
+                    country_code,
+                    distance,
+                    vs.get("test_from"),
+                    vs.get("ip"),
+                    vs.get("ping"),
+                    vs.get("download"),
+                    vs.get("upload")
+                ])
 
 if __name__ == "__main__":
     import clime.now
