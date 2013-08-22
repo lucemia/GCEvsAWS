@@ -20,3 +20,25 @@ gce,2013-08-21 22:12:11.613934,True,2934,"Far Eastone Telecommunications Co., Lt
 gce,2013-08-21 22:12:11.613934,True,3841,Taiwan Fixed Network,Taichung,Taiwan,10540.20,Google Apps.,173.255.118.4,63.34,62.32,9.41
 gce,2013-08-21 22:12:11.613934,True,3842,Taiwan Fixed Network,Kaohsiung,Taiwan,10688.23,Google Apps.,173.255.118.4,46.651,63.57,10.20
 gce,2013-08-21 22:12:11.613934,True,3921,Taiwan Fixed Network,Taoyuan,Taiwan,10427.65,Google Apps.,173.255.118.4,48.399,58.60,5.79
+gce,2013-08-22 06:39:21.600375,True,2133,Taiwan Fixed Network,Taipei,Taiwan,10408.83,Google Apps.,173.255.118.4,52.293,88.39,13.26
+gce,2013-08-22 06:39:21.600375,True,2181,kbro CO.LTD,Taipei,Taiwan,10408.83,Google Apps.,173.255.118.4,44.584,101.80,5.47
+gce,2013-08-22 06:39:21.600375,False,2182,kbro CO.LTD,Hsinchu,Taiwan,10465.21,,,,,
+gce,2013-08-22 06:39:21.600375,True,2187,"TFN Media CO., Ltd.",Yilan,Taiwan,10417.88,Google Apps.,173.255.118.4,49.988,41.04,11.81
+gce,2013-08-22 06:39:21.600375,True,2188,"TFN Media CO., Ltd.",Taipei,Taiwan,10408.83,Google Apps.,173.255.118.4,64.055,98.67,12.01
+gce,2013-08-22 06:39:21.600375,True,2189,"TFN Media CO., Ltd.",Kaohsiung,Taiwan,10688.23,Google Apps.,173.255.118.4,52.691,44.49,13.05
+gce,2013-08-22 06:39:21.600375,False,2190,kbro CO.LTD,Pingtung,Taiwan,10668.34,,,,,
+gce,2013-08-22 06:39:21.600375,False,2191,kbro CO.LTD,Hsinying,Taiwan,10632.17,,,,,
+gce,2013-08-22 06:39:21.600375,False,2192,kbro CO.LTD,Taichung,Taiwan,10540.20,,,,,
+gce,2013-08-22 06:39:21.600375,True,2327,"Far Eastone Telecommunications Co., Ltd.",Taipei,Taiwan,10408.83,Google Apps.,173.255.118.4,55.631,118.20,13.86
+gce,2013-08-22 06:39:21.600375,True,2589,"Far EasTone Telecommunications Co., Ltd",Taoyuan,Taiwan,10427.65,Google Apps.,173.255.118.4,57.22,122.39,13.28
+gce,2013-08-22 06:39:21.600375,True,2590,"Far EasTone Telecommunications Co., Ltd",Hsinchu,Taiwan,10465.21,Google Apps.,173.255.118.4,54.359,53.53,8.66
+gce,2013-08-22 06:39:21.600375,True,2591,"Far EasTone Telecommunications Co., Ltd",Taichung,Taiwan,10540.20,Google Apps.,173.255.118.4,52.691,65.58,10.12
+gce,2013-08-22 06:39:21.600375,True,2592,"Far EasTone Telecommunications Co., Ltd",Tainan,Taiwan,10666.75,Google Apps.,173.255.118.4,48.637,117.26,7.43
+gce,2013-08-22 06:39:21.600375,True,2593,"Far EasTone Telecommunications Co., Ltd",Kaohsiung,Taiwan,10688.23,Google Apps.,173.255.118.4,47.604,120.27,11.03
+gce,2013-08-22 06:39:21.600375,True,2594,"Far EasTone Telecommunications Co., Ltd",Pingtung,Taiwan,10668.34,Google Apps.,173.255.118.4,50.545,60.55,9.12
+gce,2013-08-22 06:39:21.600375,True,2595,"Far EasTone Telecommunications Co., Ltd",Hualien,Taiwan,10486.26,Google Apps.,173.255.118.4,53.962,43.67,13.69
+gce,2013-08-22 06:39:21.600375,True,2860,Blumen,Lyudao,Taiwan,10598.11,Google Apps.,173.255.118.4,53.724,70.45,11.18
+gce,2013-08-22 06:39:21.600375,True,2934,"Far Eastone Telecommunications Co., Ltd.",Neihu,Taiwan,10476.42,Google Apps.,173.255.118.4,52.055,118.74,13.91
+gce,2013-08-22 06:39:21.600375,True,3841,Taiwan Fixed Network,Taichung,Taiwan,10540.20,Google Apps.,173.255.118.4,60.32,66.03,12.89
+gce,2013-08-22 06:39:21.600375,True,3842,Taiwan Fixed Network,Kaohsiung,Taiwan,10688.23,Google Apps.,173.255.118.4,45.935,65.64,6.18
+gce,2013-08-22 06:39:21.600375,True,3921,Taiwan Fixed Network,Taoyuan,Taiwan,10427.65,Google Apps.,173.255.118.4,51.022,48.60,13.10
